@@ -2,6 +2,8 @@ import type IReturn from "../interfaces/IReturn";
 import verifyFields from "../libs/fieldsVerifier";
 import UserModel from "../models/User.model";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 export default class User {
   username: string;
   email: string;
@@ -26,7 +28,7 @@ export default class User {
     this.isArtist = isArtist;
   }
 
-  async new(): Promise<IReturn> {
+ async new(): Promise<IReturn> {
     try {
       if (
         !verifyFields([
@@ -86,4 +88,50 @@ export default class User {
       };
     }
   }
+ static async login(email:string,password:string): Promise<IReturn> {
+    try {
+      if (!verifyFields([email, password])) {
+        return {
+          message:"All fields are required",
+          statusCode:400,
+          error:true
+        
+        } 
+      }
+      const user = await UserModel.findOne({ email: email });
+      if (!user) {
+        return {
+          message: "User not found",
+          statusCode: 404,
+          error: true,
+        };
+      }
+      const checkPassword = await bcrypt.compare(password, user.password);
+      if (!checkPassword) {
+        return {
+          message: "Invalid password",
+          statusCode: 401,
+          error: true,
+        };
+      }
+      const token = jwt.sign(
+        { _id: user._id, username:user.username, email: user.email, isAdmin:user.isAdmin },
+        process.env.JWT_SECRET as string,
+      );
+      return {
+        message: "User logged in successfully",
+        statusCode: 200,
+        user: user,
+        token: token,
+        error:false
+      }
+
+    }catch(error:any){
+      return{
+        message:error.message,
+        statusCode:500,
+        error:true
+      }
+    }
+    }
 }

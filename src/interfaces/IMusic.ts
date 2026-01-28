@@ -3,10 +3,12 @@ export default interface IMusic {
     artist:string // User id
     cover:string
     audio:string
-    createdAt:Date
-    updatedAt:Date
+    createdAt?:Date
+    updatedAt?:Date
     tags:string[]
     albumId?:string
+    isPrivate:boolean
+
 
 
 

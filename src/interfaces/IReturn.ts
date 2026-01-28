@@ -1,3 +1,4 @@
+import type IMusic from "./IMusic"
 import type IUser from "./IUser"
 
 export default interface IReturn {
@@ -5,5 +6,9 @@ export default interface IReturn {
     statusCode:number
     error:boolean
     user?:IUser|IUser[]
+    token?:string
+    music?:IMusic|IMusic[]
+
+
 
 }

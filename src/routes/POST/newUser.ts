@@ -5,13 +5,11 @@ export default async function newUser(req:Request, res:Response) {
     try {
         const {username, email, avatar, backgroundImage, password, isArtist} = req.body
         const user =await new User(username, email, avatar, backgroundImage, password, isArtist).new()    
-        if(user.error){
-            return res.status(user.statusCode).json({message:user.message})
-        }
-        res.status(user.statusCode).json({message:user.message, user:user.user})
+
+        return res.status(user.statusCode).json({message:user.message, user:user.user})
     } catch (error:any) {
         console.error(error)
-        res.status(500).json({message:error.message})
+        res.status(500).json({message:error.message, error:true})
     
     }
 
