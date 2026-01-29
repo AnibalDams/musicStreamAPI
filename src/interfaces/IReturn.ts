@@ -1,4 +1,6 @@
+import type IAlbum from "./IAlbum"
 import type IMusic from "./IMusic"
+import type IPlaylist from "./IPlaylist"
 import type IUser from "./IUser"
 
 export default interface IReturn {
@@ -8,6 +10,10 @@ export default interface IReturn {
     user?:IUser|IUser[]
     token?:string
     music?:IMusic|IMusic[]
+    album?:IAlbum|IAlbum[]
+    playlist?:IPlaylist|IPlaylist[]
+
+
 
 
 

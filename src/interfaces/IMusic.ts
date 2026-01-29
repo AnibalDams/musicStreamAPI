@@ -8,6 +8,8 @@ export default interface IMusic {
     tags:string[]
     albumId?:string
     isPrivate:boolean
+    views:number
+
 
 
 

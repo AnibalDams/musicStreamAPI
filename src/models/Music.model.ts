@@ -9,6 +9,7 @@ const MusicSchema = new Schema<IMusic>({
   tags: { type: [String], required: true },
   albumId: { type: String, default: null },
   isPrivate: { type: Boolean, default: false},
+  views: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

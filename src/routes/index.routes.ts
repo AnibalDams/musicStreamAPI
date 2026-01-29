@@ -8,11 +8,13 @@ import upload from "../libs/middleware/fileUploader";
 import auth from "../libs/middleware/authMiddleware";
 import newMusic from "./POST/newMusic";
 import getUserPublicMusic from "./GET/getUserMusic";
+import getMusicById from "./GET/getMusicById";
 
 
 const router = Router();
 
 router.get("/music/user/:userId/public", auth, getUserPublicMusic)
+router.get("/music/:musicId", getMusicById)
 
 
 router.post("/file/upload", upload.single("file"), fileUploader);

@@ -37,7 +37,10 @@ export default class Music {
   }
   static async getUserPublicMusic(userId: string): Promise<IReturn> {
     try {
-      const userMusic = await MusicModel.find({ artist: userId, isPrivate: false });
+      const userMusic = await MusicModel.find({
+        artist: userId,
+        isPrivate: false,
+      });
       if (userMusic.length === 0) {
         return {
           message: "No music found",
@@ -49,6 +52,58 @@ export default class Music {
         message: "Music found",
         statusCode: 200,
         music: userMusic,
+        error: false,
+      };
+    } catch (error: any) {
+      return {
+        message: error.message,
+        statusCode: 500,
+        error: true,
+      };
+    }
+  }
+
+  static async getMusicById(musicId: string): Promise<IReturn> {
+    try {
+      const music = await MusicModel.findById(musicId);
+      if (!music) {
+        return {
+          message: "Music not found",
+          statusCode: 404,
+          error: true,
+        };
+      }
+      await MusicModel.findByIdAndUpdate(musicId, { $inc: { views: 1 } });
+      return {
+        message: "Music found",
+        statusCode: 200,
+        music: music,
+        error: false,
+      };
+    } catch (error: any) {
+      return {
+        message: error.message,
+        statusCode: 500,
+        error: true,
+      };
+    }
+  }
+  static async getPopularMusic(): Promise<IReturn> {
+    try {
+      const popularMusic = await MusicModel.find({ isPrivate: false })
+        .sort({ views: -1 })
+        .limit(10);
+      if (popularMusic.length === 0) {
+        return {
+          message: "No popular music found",
+          statusCode: 404,
+          error: true,
+        };
+      }
+      return {
+        message: "Popular music found",
+        statusCode: 200,
+        music: popularMusic,
         error: false,
       };
     } catch (error: any) {
